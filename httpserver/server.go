@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/17bixin/gobase/log"
+	"github.com/gorilla/mux"
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"
@@ -21,6 +22,7 @@ type Server struct {
 	pidFile string //进程文件
 
 	server http.Server
+	Mux    *mux.Router
 
 	httpPort int //http端口
 
@@ -39,6 +41,7 @@ func New() *Server {
 	)
 
 	return &Server{
+		Mux:         mux.NewRouter(),
 		name:        serverName,
 		hostIP:      hostIP,
 		environment: environment,
