@@ -20,7 +20,7 @@ type Server struct {
 	pidTag  string //进程号
 	pidFile string //进程文件
 
-	http.Server
+	server http.Server
 
 	httpPort int //http端口
 
@@ -28,6 +28,22 @@ type Server struct {
 	quitTimeout time.Duration
 
 	cancel context.CancelFunc
+}
+
+// New 生产Server实例
+func New() *Server {
+	var (
+		hostIP      = os.Getenv("ENV_HOST_IP")
+		serverName  = os.Getenv("ENV_SERVER_NAME")
+		environment = os.Getenv("ENV_ENVIRONMENT")
+	)
+
+	return &Server{
+		name:        serverName,
+		hostIP:      hostIP,
+		environment: environment,
+		quitChan:    make(chan interface{}),
+	}
 }
 
 // SetPort 设置服务端口
@@ -70,16 +86,35 @@ func (s *Server) deletePidFile() {
 }
 
 // Run server on addr
-func (s *Server) Run(addr string) (err error) {
+func (s *Server) Run() {
+	{ //启动时候创建pid文件
+		s.touchPidFile()
+	}
+	go s.httpServer()
+	<-s.quitChan
 
-	mux := http.ServeMux{}
-	server := http.Server{Handler: mux, Addr: addr}
-	err = server.ListenAndServe()
-
-	return err
 }
 
-// Close shutdown server forcibly
-func (s *Server) Close() error {
-	return s.Close()
+func (s *Server) httpServer() {
+	handler := http.DefaultServeMux
+
+	s.server = http.Server{
+		Addr:    fmt.Sprintf(":%d", s.httpPort),
+		Handler: handler,
+	}
+
+	log.Info(log.Fields{"app": "http  will Listen", "port": s.httpPort})
+	err := s.server.ListenAndServe()
+	if err != nil {
+		log.Error(log.Fields{"app": "http    Listen failed", "error": err})
+	}
+}
+
+// Stop 停止server
+func (s *Server) Stop() {
+	ctx, _ := context.WithTimeout(context.Background(), s.quitTimeout)
+	s.server.Shutdown(ctx)
+	s.deletePidFile()
+	log.Clear_buffer()
+	close(s.quitChan)
 }

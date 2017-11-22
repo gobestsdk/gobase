@@ -22,7 +22,7 @@ import (
 type Server struct {
 	name        string //服务名称
 	hostIP      string //主机ip
-	environment string //服务环境
+	environment string //服务环境,用于区分环境配置
 
 	pidTag  string //进程号
 	pidFile string //进程文件
