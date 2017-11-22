@@ -12,7 +12,8 @@ import (
 	"time"
 )
 
-// Server
+// Server http的server
+// router部分基于gorilla/mux
 type Server struct {
 	name        string //服务名称
 	hostIP      string //主机ip
@@ -22,7 +23,8 @@ type Server struct {
 	pidFile string //进程文件
 
 	server http.Server
-	Mux    *mux.Router
+	//Mux gorilla/mux
+	Mux *mux.Router
 
 	httpPort int //http端口
 
