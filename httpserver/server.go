@@ -99,11 +99,10 @@ func (s *Server) Run() {
 }
 
 func (s *Server) httpServer() {
-	handler := http.DefaultServeMux
 
 	s.server = http.Server{
 		Addr:    fmt.Sprintf(":%d", s.httpPort),
-		Handler: handler,
+		Handler: s.Mux,
 	}
 
 	log.Info(log.Fields{"app": "http  will Listen", "port": s.httpPort})
