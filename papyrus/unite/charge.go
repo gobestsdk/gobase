@@ -1,11 +1,17 @@
 package unite
 
 import (
-	"github.com/kafrax/papyrus"
-	"github.com/kafrax/papyrus/alipay"
+	"github.com/17bixin/gobase/papyrus"
+	"github.com/17bixin/gobase/papyrus/alipay"
 )
 
-type ChargeRequest struct {
+type ChargeAdapter interface {
+	Validator(charge map[string]string) bool           //valid msg from C
+	Convert2SP(charge map[string]string) ChargeAdapter //convert msg C2Server provider
+	Sign() string                                      //sign action
+}
+
+type ChargeOption struct {
 	OrderNo  string `json:"order_no"`
 	Channel  string `json:"channel"`
 	Amount   string `json:"amount"`
@@ -15,86 +21,64 @@ type ChargeRequest struct {
 	Body     string `json:"body"`
 }
 
+//for pay
+type ChargeBody struct {
+	Id         string `json:"id"`
+	Action     string `json:"action"`
+	Created    uint64 `json:"created"`
+	TranStatus string `json:"tran_status"`
+	TranMsg    string `json:"tran_msg"`
+	App        string `json:"app"`
+	Channel    string `json:"channel"`
+	OrderNo    string `json:"order_no"`
+	ClientIp   string `json:"client_ip"`
+	Amount     uint64 `json:"amount"`
+	Currency   string `json:"currency"`
+	Subject    string `json:"subject"`
+	Body       string `json:"body"`
+	Extra      string `json:"extra"`
+	ChargeStr  string `json:"charge_str"`
+	TimePaid   uint64 `json:"time_paid"`
+	TimeExpire uint64 `json:"time_expire"`
+	PapCode    uint32 `json:"pap_code"`
+	PapMsg     string `json:"pap_msg"`
+}
 
-func chooseAdapter(c string,pap *Papyrus)(ChargeAdapter,error){
+func NewCharge(chargeOp *ChargeOption, pap *Papyrus) *ChargeBody {
+	return nil
+}
+
+func chooseAdapter(c string, pap *Papyrus) (ChargeAdapter, error) {
 	switch c {
 	case "alipay.app":
-		return alipay.New(pap)
+		return alipay.New(pap).URLEncode()
 	}
 
-	return nil,payrus.ErrorsNew("no channel",payrus.ErrorChannel)
+	return nil, payrus.ErrorsNew("no channel", payrus.ErrorChannel)
 }
 
-func (c *ChargeRequest) Validator(charge ChargeRequest) bool {
+func (c *ChargeOption) Validator() bool {
 	panic("implement me")
 }
 
-func (c *ChargeRequest) Convert2SP(charge ChargeRequest) ChargeAdapter {
+func (c *ChargeOption) Convert2SP() ChargeAdapter {
 	panic("implement me")
 }
 
-func (c *ChargeRequest) Pay() {
+func (c *ChargeOption) Convert2C(ChargeAdapter) ChargeBody {
 	panic("implement me")
 }
 
-func (c *ChargeRequest) Convert2C(ChargeAdapter) ChargeResponse {
-	panic("implement me")
-}
-
-
-//convert ChargeRequest to ChargeResponse
-func New(request *ChargeRequest, pap *Papyrus) (c *ChargeResponse,err error) {
+//convert ChargeOption to ChargeResponse
+func New(request *ChargeOption, pap *Papyrus) (c *ChargeBody, err error) {
 	//chooseAdapter
-	ad,err:=chooseAdapter(request.Channel,pap)
+	ad, err := chooseAdapter(request.Channel, pap)
 	if err != nil {
 
 	}
-	//validator ChargeRequest is correct
-	//convert ChargeRequest to ChargeAdapter
+	//validator ChargeOption is correct
+	//convert ChargeOption to ChargeAdapter
 	//pay action
 	//convert ChargeAdapter to ChargeResponse
 
-}
-
-//for pay
-type ChargeResponse struct {
-	ID           string `json:"id"`
-	Object       string `json:"object"`
-	Created      int    `json:"created"`
-	Livemode     bool   `json:"livemode"`
-	Paid         bool   `json:"paid"`
-	Refunded     bool   `json:"refunded"`
-	Reversed     bool   `json:"reversed"`
-	App          string `json:"app"`
-	Channel      string `json:"channel"`
-	OrderNo      string `json:"order_no"`
-	ClientIP     string `json:"client_ip"`
-	Amount       int    `json:"amount"`
-	AmountSettle int    `json:"amount_settle"`
-	Currency     string `json:"currency"`
-	Subject      string `json:"subject"`
-	Body         string `json:"body"`
-	Extra struct {
-	} `json:"extra"`
-	TimePaid      interface{} `json:"time_paid"`
-	TimeExpire    int         `json:"time_expire"`
-	TimeSettle    interface{} `json:"time_settle"`
-	TransactionNo interface{} `json:"transaction_no"`
-	Refunds struct {
-		Object  string        `json:"object"`
-		URL     string        `json:"url"`
-		HasMore bool          `json:"has_more"`
-		Data    []interface{} `json:"data"`
-	} `json:"refunds"`
-	AmountRefunded int         `json:"amount_refunded"`
-	FailureCode    interface{} `json:"failure_code"`
-	FailureMsg     interface{} `json:"failure_msg"`
-	Credential struct {
-		Object string `json:"object"`
-		Upacp struct {
-			Tn   string `json:"tn"`
-			Mode string `json:"mode"`
-		} `json:"upacp"`
-	} `json:"credential"`
-	Description interface{} `json:"description"`
 }

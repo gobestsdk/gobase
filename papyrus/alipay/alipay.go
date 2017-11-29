@@ -34,10 +34,7 @@ type Alipay struct {
 	values     *url.Values
 }
 
-func New(pap *unite.Papyrus) (*Alipay, error) {
-	if chaos.IsAllNilString(pap.PrivateKey,pap.PublicKey,pap.AppID){
-		return nil,payrus.ErrorsNew("no PrivateKey or PublicKey or AppID",payrus.ErrorAlipayParams)
-	}
+func New(pap *unite.Papyrus) (*Alipay) {
 	return &Alipay{
 		domain:     "https://openapi.alipay.com/gateway.do",
 		format:     "JSON",
@@ -47,13 +44,13 @@ func New(pap *unite.Papyrus) (*Alipay, error) {
 		privateKey: pap.PrivateKey,
 		publicKey:  pap.PublicKey,
 		AppId:      pap.AppID,
-	},nil
+	}
 }
 
 // user demo:
 // alipay/Alipay.AppId="12345678"
-// Alipay.UrlValuesEncode(AliPayer)
-func (c *Alipay) UrlValuesEncode(a AliPayer) string {
+// Alipay.URLEncode(AliPayer)
+func (c *Alipay) URLEncode(a AliPayer) string {
 	u := &url.Values{}
 	u.Add("app_id", c.AppId)
 	u.Add("method", a.ChooseApi())
