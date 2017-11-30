@@ -15,8 +15,6 @@ type ChargeBody struct {
 	TranStatus string      `json:"tran_status"`
 	TranMsg    string      `json:"tran_msg"`
 	ChargeStr  string      `json:"charge_str"`
-	TimePaid   uint64      `json:"time_paid"`
-	TimeExpire uint64      `json:"time_expire"`
 	PapCode    PapyrusCode `json:"pap_code"`
 	PapMsg     string      `json:"pap_msg"`
 	ChargeOption
