@@ -6,6 +6,7 @@ import (
 
 	"github.com/kafrax/chaos"
 	"github.com/kafrax/netask"
+	"github.com/17bixin/gobase/papyrus/unite"
 )
 
 //todo Detecting the error of return system to avoid repeated payment
@@ -18,13 +19,24 @@ const (
 )
 
 type weChat struct {
-	AppId     string `json:"appid"`
+	AppId     string `json:"app_id"`
 	MchId     string `json:"mch_id"`
 	AppKey    string `json:"-"`
 	AppSecret string `json:"-"`
 }
 
+func newWeChat(pap *unite.Papyrus)*weChat{
+	return &weChat{
+		AppId:pap.AppID,
+		MchId:pap.MchID,
+		AppKey:pap.AppKey,
+		AppSecret:pap.AppSecret,
+	}
+}
+
 func (c *weChat) SignAndMarshal(m WePayer) ([]byte, error) {
+	m.SetExtraParam()
+	m.SetActionParam()
 	data := m.GetMapData()
 	e := reflect.ValueOf(c)
 	t := e.Type()
@@ -38,7 +50,7 @@ func (c *weChat) SignAndMarshal(m WePayer) ([]byte, error) {
 	return xml.MarshalIndent(chaos.ForXmlMap(data), "", " ")
 }
 
-func (c *weChat) Post(m WePayer) ([]byte, error) {
+func (c *weChat) doPost(m WePayer) ([]byte, error) {
 	b, err := c.SignAndMarshal(m)
 	if err != nil {
 		return nil, err

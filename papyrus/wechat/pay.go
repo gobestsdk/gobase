@@ -3,6 +3,7 @@ package wechat
 import (
 	"reflect"
 	"github.com/17bixin/gobase/papyrus/unite"
+	"github.com/17bixin/gobase/chaos"
 )
 
 //https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=8_1
@@ -10,12 +11,13 @@ import (
 type AppPay struct {
 	TradeType      string            `json:"trade_type"`
 	Body           string            `json:"body"`
-	NonceStr       string            `json:"nonce_str" json:"nonce_str"`
+	NonceStr       string            `json:"nonce_str"`
 	NotifyUrl      string            `json:"notify_url"`
 	SpbillCreateIp string            `json:"spbill_create_ip"`
 	TotalFee       string            `json:"total_fee"`
 	OutTradeNo     string            `json:"out_trade_no"`
-	Attach         string            `json:"attach" json:"attach"`
+	Attach         string            `json:"attach"`
+	TimeExpire     string            `json:"time_expire"`
 	Data           map[string]string `json:"-"`
 }
 
@@ -23,8 +25,7 @@ func (*AppPay) ChooseHost() string {
 	return ApiUnifyOrder
 }
 
-func (a *AppPay) SetExtraParam(key, value string) {
-	a.Data[key] = value
+func (a *AppPay) SetExtraParam() {
 }
 
 func (a *AppPay) SetActionParam() {
@@ -37,14 +38,32 @@ func (a *AppPay) SetActionParam() {
 	}
 }
 
-func (a *AppPay)GetMapData()map[string]string{
+func (a *AppPay) GetMapData() map[string]string {
 	return a.Data
 }
 
 func (a *AppPay) Validator(chargeOp *unite.ChargeOption) bool {
-	panic("implement me")
+	if chaos.IsAllNilString(
+		chargeOp.OrderNo,
+		chargeOp.NotifyUrl,
+		chargeOp.Amount,
+		chargeOp.ClientIP,
+		chargeOp.NonceStr) {
+		return false
+	}
+	return true
 }
 
-func (a *AppPay) Sign(chargeOp *unite.ChargeOption, pap *unite.Papyrus) string {
-	panic("implement me")
+func (a *AppPay) Sign(chargeOp *unite.ChargeOption, pap *unite.Papyrus) (string, error) {
+	a.Body = chargeOp.Body
+	a.TimeExpire = chargeOp.TimeoutExpress
+	a.Attach = chargeOp.Extra
+	a.NotifyUrl = chargeOp.NotifyUrl
+	a.TotalFee = chargeOp.Amount
+	a.OutTradeNo = chargeOp.OrderNo
+	a.NonceStr = chargeOp.NonceStr
+	a.SpbillCreateIp = chargeOp.ClientIP
+	a.TradeType = "APP"
+	r, err := newWeChat(pap).doPost(a)
+	return chaos.Byte2String(r), err
 }

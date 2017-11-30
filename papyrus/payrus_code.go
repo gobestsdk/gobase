@@ -3,16 +3,18 @@ package papyrus
 type PapyrusCode = uint64
 
 const (
-	PapyrusSuccess    PapyrusCode = 100000
-	PapyrusErrServer  PapyrusCode = PapyrusSuccess + 1
+	PapyrusSuccess           PapyrusCode = 100000
+	PapyrusErrServer         PapyrusCode = PapyrusSuccess + 1
 	PapyrusErrorChannel      PapyrusCode = PapyrusSuccess + 2
 	PapyrusErrorAlipayParams PapyrusCode = PapyrusSuccess + 3
+	PapyrusErrorAlipaySign   PapyrusCode = PapyrusSuccess + 3
 )
 
 var papyrusMsg = map[PapyrusCode]string{
-	PapyrusSuccess:          "SUCCESS",
-	PapyrusErrorAlipayParams: "params error",
-	PapyrusErrorChannel:      "channel not found",
+	PapyrusSuccess:           "SUCCESS",
+	PapyrusErrorAlipayParams: "params error ",
+	PapyrusErrorChannel:      "channel not found ",
+	PapyrusErrorAlipaySign:   "sign error ",
 }
 
 type PapyrusMsg struct {

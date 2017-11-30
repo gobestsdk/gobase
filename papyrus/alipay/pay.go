@@ -54,7 +54,7 @@ func (a *AppPay) BizContentValue() string {
 	return chaos.Byte2String(b)
 }
 
-func (a *AppPay)Sign(chargeOp *unite.ChargeOption, pap *unite.Papyrus)string{
+func (a *AppPay)Sign(chargeOp *unite.ChargeOption, pap *unite.Papyrus)(string,error){
 	a.Body = chargeOp.Body
 	a.TimeoutExpress = chargeOp.TimeoutExpress
 	a.PassbackParams = chargeOp.Extra

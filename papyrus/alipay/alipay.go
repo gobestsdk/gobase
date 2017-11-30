@@ -49,7 +49,7 @@ func newAliPay(pap *unite.Papyrus) *aliPay {
 // user demo:
 // AliPay/AliPay.AppId="12345678"
 // AliPay.URLEncode(AliPayer)
-func (c *aliPay) URLEncode(a AliPayer) string {
+func (c *aliPay) URLEncode(a AliPayer) (string,error) {
 	u := &url.Values{}
 	u.Add("app_id", c.AppId)
 	u.Add("method", a.ChooseApi())
@@ -68,10 +68,10 @@ func (c *aliPay) URLEncode(a AliPayer) string {
 	}
 	sig, err := SignRsa2(allKeys(u), u, chaos.String2Byte(c.privateKey))
 	if err != nil {
-		return ""
+		return "",err
 	}
 	u.Add("sign", sig)
-	return u.Encode()
+	return u.Encode(),nil
 }
 
 func allKeys(u *url.Values) (ret []string) {
@@ -84,10 +84,14 @@ func allKeys(u *url.Values) (ret []string) {
 
 //for http post
 func (c *aliPay) doPost(method string, obj AliPayer, result interface{}) (err error) {
+	r,err:=c.URLEncode(obj)
+	if err != nil {
+		return err
+	}
 	resp, err := netask.Post(
 		c.domain,
 		"application/x-www-form-urlencoded;charset=utf-8",
-		false, chaos.String2Byte(c.URLEncode(obj)),
+		false, chaos.String2Byte(r),
 	)
 	if err != nil {
 		return err

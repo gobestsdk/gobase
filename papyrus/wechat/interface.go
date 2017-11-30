@@ -3,7 +3,7 @@ package wechat
 // WePayer wechat action interface
 type WePayer interface {
 	ChooseHost() string
-	SetExtraParam(key, value string)
+	SetExtraParam()
 	SetActionParam()
 	GetMapData() map[string]string
 }
