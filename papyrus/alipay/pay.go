@@ -3,8 +3,8 @@ package alipay
 import (
 	"encoding/json"
 
-	"github.com/kafrax/chaos"
 	"github.com/17bixin/gobase/papyrus"
+	"github.com/17bixin/gobase/chaos"
 )
 
 //https://docs.open.alipay.com/204/105465/

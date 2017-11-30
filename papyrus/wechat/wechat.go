@@ -4,9 +4,9 @@ import (
 	"encoding/xml"
 	"reflect"
 
-	"github.com/kafrax/chaos"
-	"github.com/kafrax/netask"
-	"github.com/17bixin/gobase/papyrus/unite"
+	"github.com/17bixin/gobase/papyrus"
+	"github.com/17bixin/gobase/chaos"
+	"github.com/17bixin/gobase/netask"
 )
 
 //todo Detecting the error of return system to avoid repeated payment
@@ -25,7 +25,7 @@ type weChat struct {
 	AppSecret string `json:"-"`
 }
 
-func newWeChat(pap *unite.Papyrus)*weChat{
+func newWeChat(pap *papyrus.Papyrus)*weChat{
 	return &weChat{
 		AppId:pap.AppID,
 		MchId:pap.MchID,
