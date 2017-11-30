@@ -1,4 +1,4 @@
-package payrus
+package papyrus
 
 import "math"
 

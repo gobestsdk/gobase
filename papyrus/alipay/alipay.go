@@ -8,21 +8,20 @@ import (
 
 	"github.com/kafrax/chaos"
 	"github.com/kafrax/netask"
-	"github.com/kafrax/papyrus/unite"
-	"github.com/kafrax/papyrus"
+	"github.com/17bixin/gobase/papyrus/unite"
 )
 
 //todo Detecting the error of return system to avoid repeated payment
 type AliApi = string
 
 const (
-	AliApiPay           AliApi = "alipay.trade.app.pay"
-	AliApiQuery         AliApi = "alipay.trade.query"
-	AliApiTransfer      AliApi = "alipay.fund.trans.toaccount.transfer"
-	AliApiTransferQuery AliApi = "alipay.fund.trans.order.query"
+	AliApiPay           AliApi = "AliPay.trade.app.pay"
+	AliApiQuery         AliApi = "AliPay.trade.query"
+	AliApiTransfer      AliApi = "AliPay.fund.trans.toaccount.transfer"
+	AliApiTransferQuery AliApi = "AliPay.fund.trans.order.query"
 )
 
-type Alipay struct {
+type aliPay struct {
 	AppId      string
 	privateKey string
 	publicKey  string
@@ -34,9 +33,9 @@ type Alipay struct {
 	values     *url.Values
 }
 
-func New(pap *unite.Papyrus) (*Alipay) {
-	return &Alipay{
-		domain:     "https://openapi.alipay.com/gateway.do",
+func newAliPay(pap *unite.Papyrus) *aliPay {
+	return &aliPay{
+		domain:     "https://openapi.AliPay.com/gateway.do",
 		format:     "JSON",
 		charset:    "uft-8",
 		signType:   "RSA2",
@@ -48,9 +47,9 @@ func New(pap *unite.Papyrus) (*Alipay) {
 }
 
 // user demo:
-// alipay/Alipay.AppId="12345678"
-// Alipay.URLEncode(AliPayer)
-func (c *Alipay) URLEncode(a AliPayer) string {
+// AliPay/AliPay.AppId="12345678"
+// AliPay.URLEncode(AliPayer)
+func (c *aliPay) URLEncode(a AliPayer) string {
 	u := &url.Values{}
 	u.Add("app_id", c.AppId)
 	u.Add("method", a.ChooseApi())
@@ -84,11 +83,11 @@ func allKeys(u *url.Values) (ret []string) {
 }
 
 //for http post
-func (c *Alipay) Post(method string, obj AliPayer, result interface{}) (err error) {
+func (c *aliPay) doPost(method string, obj AliPayer, result interface{}) (err error) {
 	resp, err := netask.Post(
 		c.domain,
 		"application/x-www-form-urlencoded;charset=utf-8",
-		false, chaos.String2Byte(c.UrlValuesEncode(obj)),
+		false, chaos.String2Byte(c.URLEncode(obj)),
 	)
 	if err != nil {
 		return err

@@ -1,6 +1,9 @@
 package wechat
 
-import "reflect"
+import (
+	"reflect"
+	"github.com/17bixin/gobase/papyrus/unite"
+)
 
 //https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=8_1
 //app pay method
@@ -36,4 +39,12 @@ func (a *AppPay) SetActionParam() {
 
 func (a *AppPay)GetMapData()map[string]string{
 	return a.Data
+}
+
+func (a *AppPay) Validator(chargeOp *unite.ChargeOption) bool {
+	panic("implement me")
+}
+
+func (a *AppPay) Sign(chargeOp *unite.ChargeOption, pap *unite.Papyrus) string {
+	panic("implement me")
 }

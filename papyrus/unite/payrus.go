@@ -1,6 +1,7 @@
 package unite
 
 type IPapyrus interface {
+	NewPapyrus(pap Papyrus) IPapyrus
 }
 
 type Papyrus struct {
