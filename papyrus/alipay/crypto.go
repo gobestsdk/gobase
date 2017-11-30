@@ -13,7 +13,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/kafrax/chaos"
+	"github.com/17bixin/gobase/chaos"
 )
 
 func SignRsa2(keys []string, param *url.Values, privateKey []byte) (string, error) {

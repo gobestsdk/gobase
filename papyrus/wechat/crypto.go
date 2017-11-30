@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/kafrax/chaos"
+	"github.com/17bixin/gobase/chaos"
 )
 
 func checkSign(msg map[string]interface{}, key, sign string) bool {

@@ -2,8 +2,8 @@ package wechat
 
 import (
 	"reflect"
-	"github.com/17bixin/gobase/papyrus/unite"
 	"github.com/17bixin/gobase/chaos"
+	"github.com/17bixin/gobase/papyrus"
 )
 
 //https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=8_1
@@ -42,7 +42,7 @@ func (a *AppPay) GetMapData() map[string]string {
 	return a.Data
 }
 
-func (a *AppPay) Validator(chargeOp *unite.ChargeOption) bool {
+func (a *AppPay) Validator(chargeOp *papyrus.ChargeOption) bool {
 	if chaos.IsAllNilString(
 		chargeOp.OrderNo,
 		chargeOp.NotifyUrl,
@@ -54,7 +54,7 @@ func (a *AppPay) Validator(chargeOp *unite.ChargeOption) bool {
 	return true
 }
 
-func (a *AppPay) Sign(chargeOp *unite.ChargeOption, pap *unite.Papyrus) (string, error) {
+func (a *AppPay) Sign(chargeOp *papyrus.ChargeOption, pap *papyrus.Papyrus) (string, error) {
 	a.Body = chargeOp.Body
 	a.TimeExpire = chargeOp.TimeoutExpress
 	a.Attach = chargeOp.Extra

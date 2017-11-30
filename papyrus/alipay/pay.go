@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/kafrax/chaos"
-	"github.com/17bixin/gobase/papyrus/unite"
+	"github.com/17bixin/gobase/papyrus"
 )
 
 //https://docs.open.alipay.com/204/105465/
@@ -20,7 +20,7 @@ type AppPay struct {
 	TimeoutExpress string `json:"timeout_express"`
 }
 
-func (a *AppPay) Validator(chargeOp *unite.ChargeOption) bool {
+func (a *AppPay) Validator(chargeOp *papyrus.ChargeOption) bool {
 	if chaos.IsAllNilString(
 		chargeOp.OrderNo,
 		chargeOp.NotifyUrl,
@@ -54,7 +54,7 @@ func (a *AppPay) BizContentValue() string {
 	return chaos.Byte2String(b)
 }
 
-func (a *AppPay)Sign(chargeOp *unite.ChargeOption, pap *unite.Papyrus)(string,error){
+func (a *AppPay)Sign(chargeOp *papyrus.ChargeOption, pap *papyrus.Papyrus)(string,error){
 	a.Body = chargeOp.Body
 	a.TimeoutExpress = chargeOp.TimeoutExpress
 	a.PassbackParams = chargeOp.Extra

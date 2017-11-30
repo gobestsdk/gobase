@@ -6,9 +6,9 @@ import (
 	"sort"
 	"time"
 
-	"github.com/kafrax/chaos"
-	"github.com/kafrax/netask"
-	"github.com/17bixin/gobase/papyrus/unite"
+	"github.com/17bixin/gobase/papyrus"
+	"github.com/17bixin/gobase/chaos"
+	"github.com/17bixin/gobase/netask"
 )
 
 //todo Detecting the error of return system to avoid repeated payment
@@ -33,7 +33,7 @@ type aliPay struct {
 	values     *url.Values
 }
 
-func newAliPay(pap *unite.Papyrus) *aliPay {
+func newAliPay(pap *papyrus.Papyrus) *aliPay {
 	return &aliPay{
 		domain:     "https://openapi.AliPay.com/gateway.do",
 		format:     "JSON",

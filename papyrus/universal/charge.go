@@ -8,22 +8,10 @@ import (
 )
 
 type ChargeAdapter interface {
-	Validator(chargeOp *ChargeOption) bool //valid msg from C
-	Sign(chargeOp *ChargeOption, pap *Papyrus) (string,error)
+	Validator(chargeOp *papyrus.ChargeOption) bool //valid msg from C
+	Sign(chargeOp *papyrus.ChargeOption, pap *papyrus.Papyrus) (string,error)
 }
 
-type ChargeOption struct {
-	OrderNo        string `json:"order_no"`
-	NotifyUrl      string `json:"notify_url"`
-	TimeoutExpress string `json:"timeout_express"`
-	Channel        string `json:"channel"`
-	Amount         string `json:"amount"`
-	NonceStr       string `json:"nonce_str"`
-	ClientIP       string `json:"client_ip"`
-	Subject        string `json:"subject"`
-	Body           string `json:"body"`
-	Extra          string `json:"extra"`
-}
 
 type TranStatus = string
 
@@ -33,21 +21,9 @@ const (
 
 var TranMsg = make(map[TranStatus]string)
 
-type ChargeBody struct {
-	CreatedAt  int64              `json:"created"`
-	Created    string             `json:"created_at"`
-	TranStatus string             `json:"tran_status"`
-	TranMsg    string             `json:"tran_msg"`
-	ChargeStr  string             `json:"charge_str"`
-	TimePaid   uint64             `json:"time_paid"`
-	TimeExpire uint64             `json:"time_expire"`
-	PapCode    papyrus.PapyrusCode`json:"pap_code"`
-	PapMsg     string             `json:"pap_msg"`
-	ChargeOption
-}
 
-func NewCharge(chargeOp *ChargeOption, pap *Papyrus) (*ChargeBody) {
-	cb := &ChargeBody{}
+func NewCharge(chargeOp *papyrus.ChargeOption, pap *papyrus.Papyrus) (*papyrus.ChargeBody) {
+	cb := &papyrus.ChargeBody{}
 	cb.CreatedAt = time.Now().Unix()
 	cb.Created = time.Now().Format("2006-01-02 15:-5:05")
 	cb.TranStatus = TranStatusUnpaid
@@ -75,7 +51,7 @@ func NewCharge(chargeOp *ChargeOption, pap *Papyrus) (*ChargeBody) {
 	return cb
 }
 
-func chooseAdapter(c string, pap *Papyrus) (ChargeAdapter, error) {
+func chooseAdapter(c string, pap *papyrus.Papyrus) (ChargeAdapter, error) {
 	switch c {
 	case "alipay.app.pay":
 		return &alipay.AppPay{}, nil
