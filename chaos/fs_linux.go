@@ -1,4 +1,4 @@
-package fschaos
+package chaos
 
 import (
 	"log"
