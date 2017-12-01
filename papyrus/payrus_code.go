@@ -7,7 +7,7 @@ const (
 	PapyrusErrServer         PapyrusCode = PapyrusSuccess + 1
 	PapyrusErrorChannel      PapyrusCode = PapyrusSuccess + 2
 	PapyrusErrorAlipayParams PapyrusCode = PapyrusSuccess + 3
-	PapyrusErrorAlipaySign   PapyrusCode = PapyrusSuccess + 3
+	PapyrusErrorAlipaySign   PapyrusCode = PapyrusSuccess + 4
 )
 
 var papyrusMsg = map[PapyrusCode]string{

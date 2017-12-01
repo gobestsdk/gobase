@@ -10,7 +10,7 @@ import (
 	"github.com/17bixin/gobase/chaos"
 )
 
-func checkSign(msg map[string]interface{}, key, sign string) bool {
+func checkSign(msg map[string]string, key, sign string) bool {
 	signCalc := genSign(msg, key)
 	if sign == signCalc {
 		return true

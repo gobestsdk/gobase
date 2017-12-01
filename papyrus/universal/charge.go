@@ -1,7 +1,6 @@
 package universal
 
 import (
-	"time"
 	"github.com/17bixin/gobase/papyrus"
 	"github.com/17bixin/gobase/papyrus/alipay"
 	"github.com/17bixin/gobase/papyrus/wechat"
