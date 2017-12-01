@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"os"
 	"os/exec"
-	"stream/fs"
 	"strings"
 	"time"
 	"fmt"
@@ -162,7 +161,7 @@ func (m *MongoImport) MongoImportAll(col string, files ...string) {
 }
 
 func (m *MongoImport) MongoImportAllByPath(col, sub string) {
-	files := fs.ReadDirNoLink(m.dir)
+	files := ReadDirNoLink(m.dir)
 	if len(files) < 1 {
 		logx.Debug("MongoImportAllByPath |message=no dir")
 	}

@@ -10,9 +10,7 @@ type Papyrus struct {
 }
 
 type ChargeBody struct {
-	CreatedAt  int64       `json:"created"`
-	Created    string      `json:"created_at"`
-	TranStatus string      `json:"tran_status"`
+	TranStatus TranStatus  `json:"tran_status"`
 	TranMsg    string      `json:"tran_msg"`
 	ChargeStr  string      `json:"charge_str"`
 	PapCode    PapyrusCode `json:"pap_code"`
@@ -32,3 +30,11 @@ type ChargeOption struct {
 	Body           string `json:"body"`
 	Extra          string `json:"extra"`
 }
+
+type TranStatus = string
+
+const (
+	TranStatusUnpaid TranStatus = "unpaid"
+)
+
+var TranMsg = make(map[TranStatus]string)

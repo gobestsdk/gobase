@@ -12,21 +12,9 @@ type ChargeAdapter interface {
 	Sign(chargeOp *papyrus.ChargeOption, pap *papyrus.Papyrus) (string,error)
 }
 
-
-type TranStatus = string
-
-const (
-	TranStatusUnpaid TranStatus = "unpaid"
-)
-
-var TranMsg = make(map[TranStatus]string)
-
-
 func NewCharge(chargeOp *papyrus.ChargeOption, pap *papyrus.Papyrus) (*papyrus.ChargeBody) {
 	cb := &papyrus.ChargeBody{}
-	cb.CreatedAt = time.Now().Unix()
-	cb.Created = time.Now().Format("2006-01-02 15:-5:05")
-	cb.TranStatus = TranStatusUnpaid
+	cb.TranStatus = papyrus.TranStatusUnpaid
 	cb.TranMsg = "unpaid"
 	cb.PapCode = papyrus.PapyrusSuccess
 	cb.PapMsg = papyrus.GetMsgByType(papyrus.PapyrusSuccess)
