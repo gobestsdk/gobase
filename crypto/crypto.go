@@ -1,13 +1,13 @@
 package chaos
 
 import (
-	"io"
 	"crypto/md5"
-	"encoding/hex"
-	"fmt"
-	"sort"
 	"crypto/sha1"
 	"encoding/base64"
+	"encoding/hex"
+	"fmt"
+	"io"
+	"sort"
 	"strings"
 )
 

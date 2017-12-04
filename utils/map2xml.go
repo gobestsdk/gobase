@@ -1,9 +1,9 @@
-package chaos
+package utils
 
 import (
 	"encoding/xml"
-	"io"
 	"fmt"
+	"io"
 )
 
 //from:https://stackoverflow.com/questions/30928770/marshall-map-to-xml-in-go
@@ -18,7 +18,7 @@ func (m ForXmlMap) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if len(m) == 0 {
 		return nil
 	}
-	start.Name.Local="xml"
+	start.Name.Local = "xml"
 	err := e.EncodeToken(start)
 	if err != nil {
 		return err

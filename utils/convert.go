@@ -1,10 +1,10 @@
-package chaos
+package utils
 
 import (
-	"encoding/xml"
-	"unsafe"
 	"bytes"
+	"encoding/xml"
 	"github.com/json-iterator/go"
+	"unsafe"
 )
 
 //data convert
