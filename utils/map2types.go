@@ -1,8 +1,8 @@
 package chaos
 
 import (
-	"reflect"
 	"fmt"
+	"reflect"
 )
 
 func Struct2Map(in interface{}, tag string) (map[string]string, error) {

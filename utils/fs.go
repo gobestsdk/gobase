@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"syscall"
-
 )
 
 func ReadDirNoLink(path string) (s []string) {

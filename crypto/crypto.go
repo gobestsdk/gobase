@@ -1,4 +1,4 @@
-package chaos
+package crypto
 
 import (
 	"crypto/md5"
@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"github.com/17bixin/gobase/utils"
 	"io"
 	"sort"
 	"strings"
@@ -94,7 +95,7 @@ func CalcSign(mReq map[string]interface{}, key string) (sign string) {
 
 	signStrings = signStrings + "key=" + key
 	md5Ctx := md5.New()
-	md5Ctx.Write(String2Byte(signStrings))
+	md5Ctx.Write(utils.String2Byte(signStrings))
 	cipherStr := md5Ctx.Sum(nil)
 	upperSign := strings.ToUpper(hex.EncodeToString(cipherStr))
 	return upperSign
