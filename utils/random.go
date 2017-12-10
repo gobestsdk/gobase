@@ -4,9 +4,10 @@ import (
 	"crypto/rand"
 	"io"
 	"strconv"
-
 	"github.com/google/uuid"
 	"math/big"
+	"time"
+	mrand "math/rand"
 )
 
 //uuid+unix time
@@ -54,4 +55,31 @@ func Int64Range(min, max int64) int64 {
 	}
 	result = min + b.Int64()
 	return result
+}
+
+const alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+func RandomLetters(n int, alphabets ...byte) string {
+	var bytes = make([]byte, n)
+	var randby bool
+	if num, err := r.Read(bytes); num != n || err != nil {
+		mrand.Seed(time.Now().UnixNano())
+		randby = true
+	}
+	for i, b := range bytes {
+		if len(alphabets) == 0 {
+			if randby {
+				bytes[i] = alphanum[mrand.Intn(len(alphanum))]
+			} else {
+				bytes[i] = alphanum[b%byte(len(alphanum))]
+			}
+		} else {
+			if randby {
+				bytes[i] = alphabets[mrand.Intn(len(alphabets))]
+			} else {
+				bytes[i] = alphabets[b%byte(len(alphabets))]
+			}
+		}
+	}
+	return Byte2String(bytes)
 }
