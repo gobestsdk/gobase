@@ -32,9 +32,9 @@ type Server struct {
 	rpcRegister   func()         //rpc注册
 	httpRegisters []HTTPRegister //http注册
 
-	HTTPSvr  *http.Server //http服务
-	httpPort int          //http端口
-
+	HTTPSvr     *http.Server //http服务
+	httpPort    int          //http端口
+	OpenHttp    bool         //同时开启http
 	quitChan    chan interface{}
 	quitTimeout time.Duration
 
@@ -127,8 +127,10 @@ func (s *Server) Run() {
 		s.touchPidFile()
 	}
 
-	go s.rpcServer()  //rpc服务
-	go s.httpServer() //代理http server
+	go s.rpcServer() //rpc服务
+	if s.OpenHttp {
+		go s.httpServer() //代理http server
+	}
 
 	<-s.quitChan
 }
