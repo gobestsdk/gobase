@@ -79,9 +79,9 @@ func IsMoney2Point(s string, regex ...string) bool {
 	return reg.MatchString(s)
 }
 
-func IsAllNilString(s ...string) bool {
+func IsAllNotNilString(s ...string) bool {
 	for _, v := range s {
-		if len(v) > 1 {
+		if len(v) == 0 {
 			return false
 		}
 	}
