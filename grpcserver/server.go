@@ -139,7 +139,9 @@ func (s *Server) Run() {
 func (s *Server) Stop() {
 	ctx, _ := context.WithTimeout(context.Background(), s.quitTimeout)
 
-	s.HTTPSvr.Shutdown(ctx)
+	if(s.HTTPSvr!=nil){
+		s.HTTPSvr.Shutdown(ctx)
+	}
 	s.RPCSvr.GracefulStop()
 
 	s.deletePidFile()
