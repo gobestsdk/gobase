@@ -62,6 +62,7 @@ const alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
 func RandomLetters(n int, alphabets ...byte) string {
 	var bytes = make([]byte, n)
 	var randby bool
+	r := mrand.New(mrand.NewSource(time.Now().UnixNano()))
 	if num, err := r.Read(bytes); num != n || err != nil {
 		mrand.Seed(time.Now().UnixNano())
 		randby = true
