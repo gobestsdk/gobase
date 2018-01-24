@@ -5,6 +5,9 @@ import (
 	"os"
 )
 
+func WriteLog(w bool) {
+	writelog = w
+}
 func makefile() {
 	_, err := os.Stat(logpath)
 	if err != nil {

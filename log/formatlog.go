@@ -15,9 +15,10 @@ const (
 )
 
 var (
-	logpath string = "log"
-	level   int
-	buffer  []map[string]interface{}
+	logpath  string = "log"
+	level    int
+	writelog bool = true
+	buffer   []map[string]interface{}
 )
 
 type Fields map[string]interface{}
@@ -57,7 +58,7 @@ func console_print(l int, arg map[string]interface{}) {
 }
 func print(l int, arg map[string]interface{}) {
 	arg["_"] = time.Now().String()[:19]
-	if l >= level {
+	if l >= level && writelog {
 		base_print(arg)
 	}
 	console_print(l, arg)
