@@ -2,7 +2,7 @@ package httpserver
 
 import (
 	"fmt"
-	"github.com/17bixin/gobase/log"
+	"github.com/gobestsdk/gobase/log"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/context"
 	"io/ioutil"

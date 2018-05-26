@@ -15,7 +15,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	"github.com/17bixin/gobase/log"
+	"github.com/gobestsdk/gobase/log"
 )
 
 // Server 包含了grpc server, 集成assembly下不同的拦截器
