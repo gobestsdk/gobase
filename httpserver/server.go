@@ -3,7 +3,7 @@ package httpserver
 import (
 	"fmt"
 	"github.com/gobestsdk/gobase/log"
-	"github.com/gorilla/mux"
+ 
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"
@@ -22,9 +22,8 @@ type Server struct {
 	pidTag  string //进程号
 	pidFile string //进程文件
 
-	server http.Server
-	//Mux gorilla/mux
-	Mux *mux.Router
+	Server http.Server
+ 
 
 	httpPort int //http端口
 
@@ -43,7 +42,7 @@ func New() *Server {
 	)
 
 	return &Server{
-		Mux:         mux.NewRouter(),
+	 
 		name:        serverName,
 		hostIP:      hostIP,
 		environment: environment,
@@ -101,14 +100,8 @@ func (s *Server) Run() {
 }
 
 func (s *Server) httpServer() {
-
-	s.server = http.Server{
-		Addr:    fmt.Sprintf(":%d", s.httpPort),
-		Handler: s.Mux,
-	}
-
 	log.Info(log.Fields{"app": "http  will Listen", "port": s.httpPort})
-	err := s.server.ListenAndServe()
+	err := http.ListenAndServe(fmt.Sprintf(":%d", s.httpPort),nil)
 	if err != nil {
 		log.Error(log.Fields{"app": "http    Listen failed", "error": err})
 	}
@@ -117,7 +110,7 @@ func (s *Server) httpServer() {
 // Stop 停止server
 func (s *Server) Stop() {
 	ctx, _ := context.WithTimeout(context.Background(), s.quitTimeout)
-	s.server.Shutdown(ctx)
+	s.Server.Shutdown(ctx)
 	s.deletePidFile()
 	log.Clear_buffer()
 	close(s.quitChan)
