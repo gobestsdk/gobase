@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+	"runtime"
+	"strconv"
 )
 
 const (
@@ -58,6 +60,15 @@ func console_print(l int, arg map[string]interface{}) {
 }
 func print(l int, arg map[string]interface{}) {
 	arg["_"] = time.Now().String()[:19]
+
+	_,file,line,ok := runtime.Caller(2)
+	if(ok){
+		//f := runtime.FuncForPC(pc)
+
+		arg["_trace"]=file+":"+strconv.Itoa(line)
+	}
+
+
 	if l >= level && writelog {
 		base_print(arg)
 	}
