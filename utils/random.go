@@ -2,12 +2,12 @@ package utils
 
 import (
 	"crypto/rand"
-	"io"
-	"strconv"
 	"github.com/google/uuid"
+	"io"
 	"math/big"
-	"time"
 	mrand "math/rand"
+	"strconv"
+	"time"
 )
 
 //uuid+unix time
@@ -82,5 +82,5 @@ func RandomLetters(n int, alphabets ...byte) string {
 			}
 		}
 	}
-	return Byte2String(bytes)
+	return string(bytes)
 }
