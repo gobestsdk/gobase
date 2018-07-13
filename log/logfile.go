@@ -11,10 +11,10 @@ func WriteLog(w bool) {
 func makefile() {
 	_, err := os.Stat(logpath)
 	if err != nil {
-		console_print(INFO, Fields{"log": "create log file", "filename": logpath})
+		console_printjson(INFO, Fields{"log": "create log file", "filename": logpath})
 		fs, err := os.OpenFile(logpath, os.O_CREATE|os.O_RDWR, os.ModePerm)
 		if err != nil {
-			console_print(FATAL, Fields{"err": err})
+			console_printjson(FATAL, Fields{"err": err})
 			return
 		}
 		fs.Close()
@@ -25,7 +25,7 @@ func write() {
 
 	afs, err := os.OpenFile(logpath, os.O_APPEND|os.O_RDWR, os.ModeAppend)
 	if err != nil {
-		console_print(FATAL, Fields{"log": "open log file", "err": err})
+		console_printjson(FATAL, Fields{"log": "open log file", "err": err})
 		return
 	}
 	defer afs.Close()
@@ -41,7 +41,7 @@ func Clear_buffer() {
 
 	afs, err := os.OpenFile(logpath, os.O_APPEND|os.O_RDWR, os.ModeAppend)
 	if err != nil {
-		console_print(FATAL, Fields{"log": "open log file", "err": err})
+		console_printjson(FATAL, Fields{"log": "open log file", "err": err})
 		return
 	}
 	defer afs.Close()

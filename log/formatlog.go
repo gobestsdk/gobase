@@ -3,9 +3,9 @@ package log
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 	"runtime"
 	"strconv"
+	"time"
 )
 
 const (
@@ -38,8 +38,13 @@ func base_print(arg map[string]interface{}) {
 	}
 }
 
-func console_print(l int, arg map[string]interface{}) {
+func console_printjson(l int, arg map[string]interface{}) {
+
+	trace := arg["_"].(string) + " " + arg["_trace"].(string)
+	delete(arg, "_")
+	delete(arg, "_trace")
 	bs, _ := json.Marshal(arg)
+
 	var c Colortext
 	switch l {
 	case PRINT:
@@ -53,7 +58,7 @@ func console_print(l int, arg map[string]interface{}) {
 	case FATAL:
 		c = Red
 	}
-	s := string(c) + string(bs) + string(EndColor)
+	s := string(c) + trace + "\t" + string(bs) + string(EndColor)
 
 	fmt.Println(s)
 
@@ -61,18 +66,16 @@ func console_print(l int, arg map[string]interface{}) {
 func print(l int, arg map[string]interface{}) {
 	arg["_"] = time.Now().String()[:19]
 
-	_,file,line,ok := runtime.Caller(2)
-	if(ok){
+	_, file, line, ok := runtime.Caller(2)
+	if ok {
 		//f := runtime.FuncForPC(pc)
-
-		arg["_trace"]=file+":"+strconv.Itoa(line)
+		arg["_trace"] = file + ":" + strconv.Itoa(line)
 	}
-
 
 	if l >= level && writelog {
 		base_print(arg)
 	}
-	console_print(l, arg)
+	console_printjson(l, arg)
 }
 
 func Print(arg map[string]interface{}) {
