@@ -3,7 +3,7 @@ package httpserver
 import (
 	"fmt"
 	"github.com/gobestsdk/gobase/log"
- 
+
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"
@@ -15,15 +15,12 @@ import (
 // Server http的server
 // router部分基于gorilla/mux
 type Server struct {
-	name        string //服务名称
-	hostIP      string //主机ip
-	environment string //服务环境
+	name string //服务名称
 
 	pidTag  string //进程号
 	pidFile string //进程文件
 
 	Server http.Server
- 
 
 	httpPort int //http端口
 
@@ -34,19 +31,11 @@ type Server struct {
 }
 
 // New 生产Server实例
-func New() *Server {
-	var (
-		hostIP      = os.Getenv("ENV_HOST_IP")
-		serverName  = os.Getenv("ENV_SERVER_NAME")
-		environment = os.Getenv("ENV_ENVIRONMENT")
-	)
+func New(serverName string) *Server {
 
 	return &Server{
-	 
-		name:        serverName,
-		hostIP:      hostIP,
-		environment: environment,
-		quitChan:    make(chan interface{}),
+		name:     serverName,
+		quitChan: make(chan interface{}),
 	}
 }
 
@@ -101,7 +90,7 @@ func (s *Server) Run() {
 
 func (s *Server) httpServer() {
 	log.Info(log.Fields{"app": "http  will Listen", "port": s.httpPort})
-	err := http.ListenAndServe(fmt.Sprintf(":%d", s.httpPort),nil)
+	err := http.ListenAndServe(fmt.Sprintf(":%d", s.httpPort), nil)
 	if err != nil {
 		log.Error(log.Fields{"app": "http    Listen failed", "error": err})
 	}
