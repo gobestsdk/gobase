@@ -90,7 +90,7 @@ func (s *Server) Run() {
 
 func (s *Server) httpServer() {
 	log.Info(log.Fields{"app": "http  will Listen", "port": s.httpPort})
-	err := http.ListenAndServe(fmt.Sprintf(":%d", s.httpPort), nil)
+	err := s.Server.ListenAndServe(fmt.Sprintf(":%d", s.httpPort), nil)
 	if err != nil {
 		log.Error(log.Fields{"app": "http    Listen failed", "error": err})
 	}
