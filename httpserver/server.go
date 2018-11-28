@@ -20,10 +20,9 @@ type Server struct {
 	pidTag  string //进程号
 	pidFile string //进程文件
 
-	Server http.Server
-
-	httpPort int //http端口
-
+	Server      http.Server
+	ServerMux   *http.ServeMux
+	httpPort    int //http端口
 	quitChan    chan interface{}
 	quitTimeout time.Duration
 
@@ -33,16 +32,21 @@ type Server struct {
 // New 生产Server实例
 func New(serverName string) *Server {
 
-	return &Server{
+	s := &Server{
 		name:     serverName,
+		Server:   http.Server{},
 		quitChan: make(chan interface{}),
 	}
+	s.ServerMux = new(http.ServeMux)
+	s.Server.Handler = s.ServerMux
+	return s
 }
 
 // SetPort 设置服务端口
 func (s *Server) SetPort(port int) {
 
 	s.httpPort = port
+	s.Server.Addr = ":" + fmt.Sprint(port)
 }
 
 // touchPidFile 创建pid文件
@@ -85,12 +89,11 @@ func (s *Server) Run() {
 	}
 	go s.httpServer()
 	<-s.quitChan
-
 }
 
 func (s *Server) httpServer() {
 	log.Info(log.Fields{"app": "http  will Listen", "port": s.httpPort})
-	err := s.Server.ListenAndServe(fmt.Sprintf(":%d", s.httpPort), nil)
+	err := s.Server.ListenAndServe()
 	if err != nil {
 		log.Error(log.Fields{"app": "http    Listen failed", "error": err})
 	}
