@@ -5,7 +5,6 @@ import (
 	"github.com/gobestsdk/gobase/log"
 	"io/ioutil"
 
-	"github.com/light4d/yourfs/model"
 	"net/http"
 	"strconv"
 )
@@ -45,15 +44,7 @@ func Options(req *http.Request, resp http.ResponseWriter) {
 	Header(resp)
 	resp.Write([]byte(""))
 }
-func Endresp(result model.CommonResp, resp http.ResponseWriter) {
-	log.Info(log.Fields{
-		"resp": result,
-	})
-	Header(resp)
 
-	r, _ := json.Marshal(result)
-	resp.Write(r)
-}
 func Header(resp http.ResponseWriter) {
 
 	resp.Header().Set("Access-Control-Allow-Origin", "*")             //允许访问所有域
