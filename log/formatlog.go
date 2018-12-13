@@ -39,8 +39,13 @@ func base_print(arg map[string]interface{}) {
 }
 
 func console_printjson(l int, arg map[string]interface{}) {
+	trace := ""
+	if t, exist := arg["_"]; !exist || t == nil {
 
-	trace := arg["_"].(string) + " " + arg["_trace"].(string)
+	} else {
+		trace = arg["_"].(string) + " " + arg["_trace"].(string)
+	}
+
 	delete(arg, "_")
 	delete(arg, "_trace")
 	bs, _ := json.Marshal(arg)
