@@ -92,7 +92,7 @@ func (s *Server) Run() {
 }
 
 func (s *Server) httpServer() {
-	log.Info(log.Fields{"app": "http  will Listen", "port": s.httpPort})
+	log.Info(log.Fields{"server addr:": "http://127.0.0.1:" + strconv.Itoa(s.httpPort)})
 	err := s.Server.ListenAndServe()
 	if err != nil {
 		log.Error(log.Fields{"app": "http    Listen failed", "error": err})
