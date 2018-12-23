@@ -52,7 +52,7 @@ func Header(resp http.ResponseWriter, contenttype string, methods string) {
 	resp.Header().Set("content-type", contenttype)                    //
 	resp.Header().Set("Access-Control-Allow-Methods", methods)
 }
-func Unmarshalreqbody(req *http.Request, s interface{}) (err error) {
+func To(req *http.Request, s interface{}) (err error) {
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		return err
