@@ -40,17 +40,20 @@ func Getfilter(req *http.Request) (filter map[string]interface{}) {
 	return
 }
 
-func Options(req *http.Request, resp http.ResponseWriter, contenttype string, methods string) {
-	Header(resp, contenttype, methods)
+func Options(req *http.Request, resp http.ResponseWriter, contenttype ,server, methods string) {
+	Header(resp, contenttype,server, methods)
 	resp.Write([]byte(""))
 }
 
-func Header(resp http.ResponseWriter, contenttype string, methods string) {
+func Header(resp http.ResponseWriter, contenttype ,server, methods string) {
 
 	resp.Header().Set("Access-Control-Allow-Origin", "*")             //允许访问所有域
-	resp.Header().Add("Access-Control-Allow-Headers", "Content-Type") //header的类型
-	resp.Header().Set("content-type", contenttype)                    //
+	resp.Header().Add("Access-Control-Allow-Headers", "Content-Type,token") //header的类型
+	resp.Header().Set("content-type", contenttype)
+	resp.Header().Set("Server", server)
+
 	resp.Header().Set("Access-Control-Allow-Methods", methods)
+	resp.Header().Set(" Access-Control-Allow-Credentials", "true")
 }
 func To(req *http.Request, s interface{}) (err error) {
 	body, err := ioutil.ReadAll(req.Body)
