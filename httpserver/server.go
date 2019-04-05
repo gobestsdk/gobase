@@ -1,10 +1,10 @@
 package httpserver
 
 import (
+	"context"
 	"fmt"
 	"github.com/gobestsdk/gobase/log"
 
-	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"
 	"os"

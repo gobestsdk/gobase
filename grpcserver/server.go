@@ -1,6 +1,7 @@
 package grpcserver
 
 import (
+	"context"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -12,7 +13,7 @@ import (
 
 	"fmt"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"golang.org/x/net/context"
+
 	"google.golang.org/grpc"
 
 	"github.com/gobestsdk/gobase/log"
@@ -139,7 +140,7 @@ func (s *Server) Run() {
 func (s *Server) Stop() {
 	ctx, _ := context.WithTimeout(context.Background(), s.quitTimeout)
 
-	if(s.HTTPSvr!=nil){
+	if s.HTTPSvr != nil {
 		s.HTTPSvr.Shutdown(ctx)
 	}
 	s.RPCSvr.GracefulStop()
