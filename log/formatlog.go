@@ -21,7 +21,18 @@ var (
 	level    int
 	writelog bool = true
 	buffer   []map[string]interface{}
+	//showtracefile 是否显示代码
+	showtime      bool = false
+	showtracefile bool = false
 )
+
+func SetTime(show bool) {
+	showtime = show
+
+}
+func SetCodefile(show bool) {
+	showtracefile = show
+}
 
 type Fields map[string]interface{}
 
@@ -39,16 +50,6 @@ func base_print(arg map[string]interface{}) {
 }
 
 func console_printjson(l int, arg map[string]interface{}) {
-	trace := ""
-	if t, exist := arg["_"]; !exist || t == nil {
-
-	} else {
-		trace = arg["_"].(string) + " " + arg["_trace"].(string)
-	}
-
-	delete(arg, "_")
-	delete(arg, "_trace")
-	bs, _ := json.Marshal(arg)
 
 	var c Colortext
 	switch l {
@@ -63,7 +64,24 @@ func console_printjson(l int, arg map[string]interface{}) {
 	case FATAL:
 		c = Red
 	}
-	s := string(c) + trace + "\t" + string(bs) + string(EndColor)
+	s := string(c)
+	if showtime {
+
+		s = s + arg["_"].(string)
+	}
+	if showtracefile {
+		if t, exist := arg["_trace"]; !exist || t == nil {
+
+		} else {
+			s = s + " " + arg["_trace"].(string)
+		}
+	}
+
+	delete(arg, "_")
+	delete(arg, "_trace")
+	bs, _ := json.Marshal(arg)
+
+	s = s + "\t" + string(bs) + string(EndColor)
 
 	fmt.Println(s)
 
