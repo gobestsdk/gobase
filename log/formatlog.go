@@ -54,7 +54,7 @@ func console_printjson(l int, arg map[string]interface{}) {
 	var c Colortext
 	switch l {
 	case PRINT:
-		c = White
+		c = Green
 	case INFO:
 		c = Pink
 	case WARN:
