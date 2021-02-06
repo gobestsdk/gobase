@@ -5,9 +5,6 @@ import (
 	"strings"
 )
 
-const MethodSearch = "SEARCH"
-const MethodCreate = "CREATE"
-
 func AccessControlAllowMethods() string {
 	var method = []string{
 		http.MethodGet,
@@ -15,8 +12,6 @@ func AccessControlAllowMethods() string {
 		http.MethodPut,
 		http.MethodPost,
 		http.MethodOptions,
-		MethodCreate,
-		MethodSearch,
 	}
 	return strings.Join(method, ",")
 }

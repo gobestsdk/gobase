@@ -3,7 +3,9 @@ package log
 import (
 	"encoding/json"
 	"fmt"
+	"gopkg.in/yaml.v2"
 	"runtime"
+	"runtime/debug"
 	"strconv"
 	"time"
 )
@@ -17,10 +19,11 @@ const (
 )
 
 var (
-	logpath  string = "log"
-	level    int
-	writelog bool = true
-	buffer   []map[string]interface{}
+	logpath           string = "log"
+	level             int
+	serializationtype string
+	writelog          bool = false
+
 	//showtracefile 是否显示代码
 	showtime      bool = false
 	showtracefile bool = false
@@ -28,7 +31,9 @@ var (
 
 func SetTime(show bool) {
 	showtime = show
-
+}
+func SetSerializationtype(t string) {
+	serializationtype = t
 }
 func SetCodefile(show bool) {
 	showtracefile = show
@@ -37,24 +42,20 @@ func SetCodefile(show bool) {
 type Fields map[string]interface{}
 
 func Setlogfile(f string) {
+	writelog = true
 	logpath = f
 }
 func Setlevel(l int) {
 	level = l
 }
-func base_print(arg map[string]interface{}) {
-	buffer = append(buffer, arg)
-	if len(buffer) > 100 {
-		write()
-	}
-}
 
 func console_printjson(l int, arg map[string]interface{}) {
 
 	var c Colortext
+	var pre bool
 	switch l {
 	case PRINT:
-		c = Green
+		c = Black
 	case INFO:
 		c = Pink
 	case WARN:
@@ -65,31 +66,57 @@ func console_printjson(l int, arg map[string]interface{}) {
 		c = Red
 	}
 	s := string(c)
-	if showtime {
+	if showtime || l >= WARN {
 
 		s = s + arg["_"].(string)
+		pre = true
 	}
-	if showtracefile {
+	if showtracefile || l >= WARN {
 		if t, exist := arg["_trace"]; !exist || t == nil {
-
 		} else {
 			s = s + " " + arg["_trace"].(string)
+			pre = true
 		}
 	}
 
 	delete(arg, "_")
 	delete(arg, "_trace")
-	bs, _ := json.Marshal(arg)
+	var bs []byte
+	var err error
+	switch serializationtype {
+	case "yaml":
+		bs, err = yaml.Marshal(arg)
+	default:
+		bs, err = json.Marshal(arg)
 
-	s = s + "\t" + string(bs) + string(EndColor)
+	}
+
+	if err != nil {
+		println(err.Error())
+	}
+	if pre {
+		s = s + "\t" + string(bs) + string(EndColor)
+	} else {
+		s = s + string(bs) + string(EndColor)
+	}
 
 	fmt.Println(s)
 
 }
+
 func print(l int, arg map[string]interface{}) {
 	arg["_"] = time.Now().String()[:19]
 
-	_, file, line, ok := runtime.Caller(2)
+	var file string
+	var line int
+	var ok bool
+	if l >= ERROR {
+		_, file, line, ok = runtime.Caller(3)
+		debug.PrintStack()
+	} else {
+		_, file, line, ok = runtime.Caller(2)
+	}
+
 	if ok {
 		//f := runtime.FuncForPC(pc)
 		arg["_trace"] = file + ":" + strconv.Itoa(line)

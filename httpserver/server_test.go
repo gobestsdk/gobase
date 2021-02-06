@@ -1,9 +1,15 @@
 package httpserver
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestServer_Run(t *testing.T) {
-	s := New()
-	s.SetPort(8080)
-	s.Run()
+	s := New("test")
+	s.SetPort(":8090")
+	go s.Run()
+
+	s.Waitstop()
+	time.Sleep(time.Second * 5)
 }
